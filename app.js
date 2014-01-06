@@ -22,7 +22,7 @@ var TodosView = Backbone.View.extend({
   initialize: function() {
     this.listenTo(this.collection, 'add', this.render);
   },
-  tagName: 'ul', // will find already exisiting ul on html page
+  tagName: 'ul', 
   render: function() {
     this.$el.html('');
 
