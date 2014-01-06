@@ -1,11 +1,9 @@
 var TodoModel = Backbone.Model.extend({
   initialize: function() {
-
   },
   defaults: {
     done: false
   }
-
 });
 
 var TodoView = Backbone.View.extend({
@@ -22,16 +20,29 @@ var TodoView = Backbone.View.extend({
 
 var TodosView = Backbone.View.extend({
   initialize: function() {
+    this.listenTo(this.collection, 'add', this.render);
   },
-  el: 'ul.list', // will find already exisiting ul on html page
+  tagName: 'ul', // will find already exisiting ul on html page
   render: function() {
     this.$el.html('');
+
     this.collection.each(function(model, index) {
-      (new TodoView({model: model})).render().appendTo($el);
-    });
+      var view = (new TodoView({model: model})).render();
+      this.$el.append(view.$el);
+    }, this);
+    return this;
   }
 });
 
+var todoCollection = new Backbone.Collection();
 
+var todosView = new TodosView({collection:todoCollection});
 
-
+$(function(){
+  $(document).on('submit', 'form', function(e) {
+    e.preventDefault();
+    var model = new TodoModel({content: $(this).find('input[name="input"]').val()});
+    todoCollection.push(model);
+  });
+  $('div.list').html(todosView.render().$el);
+});
