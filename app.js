@@ -20,3 +20,18 @@ var TodoView = Backbone.View.extend({
   }
 });
 
+var TodosView = Backbone.View.extend({
+  initialize: function() {
+  },
+  el: 'ul.list', // will find already exisiting ul on html page
+  render: function() {
+    this.$el.html('');
+    this.collection.each(function(model, index) {
+      (new TodoView({model: model})).render().appendTo($el);
+    });
+  }
+});
+
+
+
+
